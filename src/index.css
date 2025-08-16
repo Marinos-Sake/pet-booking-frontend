@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+
+/* Design colors */
+@theme {
+    --color-primary-brand:   #4F46E5;
+    --color-secondary-accent:#F59E0B;
+    --color-surface-canvas:  #F8FAFC;
+    --color-text-ink:        #0F172A;
+}
+@theme {
+  --color-surface-card:    #FFFFFF;
+    --color-border-soft:     #E2E8F0;
+    --color-text-muted:      #475569;
+}
