@@ -1,10 +1,27 @@
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import dogs from "../assets/Dogs.png";
 import friends from "../assets/friends.png";
 import vacation from "../assets/vacation.png";
+import {useAuth} from "../features/auth/useAuth.tsx";
 
 function Home() {
+
+    const nav = useNavigate();
+    const { isAuthenticated } = useAuth();
+
+    function handleBookingClick() {
+        if (isAuthenticated) {
+            nav("/booking");
+        } else {
+            nav("/login", {
+                state: {
+                    from: { pathname: "/booking" },
+                    notice: "Πρέπει να συνδεθείς για να κάνεις κράτηση.",
+                },
+            });
+        }
+    }
     return (
         <div className="min-h-screen bg-gradient-to-b from-secondary-accent/10 via-surface-canvas to-primary-brand/5">
 
@@ -41,16 +58,17 @@ function Home() {
                     </p>
 
                     <div className="mt-6 flex items-center gap-3">
-                        <Link
-                            to="/booking"
+                        <button
+                            onClick={handleBookingClick}
                             className="rounded-xl bg-primary-brand px-4 py-2 text-white shadow-sm hover:opacity-95"
                         >
                             Κάνε Κράτηση!
-                        </Link>
+                        </button>
                         <span className="rounded-lg border border-secondary-accent/30 bg-secondary-accent/15 px-2 py-1 text-sm text-secondary-accent">
-                         Νέο
+                        Νέο
                         </span>
                     </div>
+
 
                     <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div className="rounded-2xl border border-secondary-accent/20 bg-white p-5 shadow-sm">

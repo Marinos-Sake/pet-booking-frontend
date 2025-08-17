@@ -27,16 +27,31 @@ function Navbar() {
             <div className="mx-auto max-w-6xl px-6 flex items-center justify-between py-4">
                 {showLogo && (
                     <Link to="/" className="flex items-center gap-2">
-                        <img
-                            src={logo}
-                            alt="App logo"
-                            className="w-10 h-10 rounded-full overflow-hidden"
-                        />
+                        <img src={logo} alt="App logo" className="w-10 h-10 rounded-full overflow-hidden" />
                         <span className="font-bold text-text-ink">Φιλοξενία κατοικιδίων</span>
                     </Link>
                 )}
 
                 <ul className="flex items-center gap-6">
+                    {isAuthenticated && (
+                        <li>
+                            <NavLink
+                                to="/me"
+                                className={({ isActive }) =>
+                                    [
+                                        "text-text-ink hover:text-primary-brand uppercase tracking-wide font-semibold",
+                                        "px-2 py-1 transition-colors",
+                                        isActive
+                                            ? "border-b-2 border-primary-brand"
+                                            : "border-b-2 border-transparent hover:border-primary-brand/70",
+                                    ].join(" ")
+                                }
+                            >
+                                ΤΟ ΠΡΟΦΙΛ ΜΟΥ
+                            </NavLink>
+                        </li>
+                    )}
+
                     {navItems.map((item) => (
                         <li key={item.to}>
                             <NavLink
