@@ -67,8 +67,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }, [token, isExpired]);
 
     const login = useCallback(async (username: string, password: string) => {
-        const res = await loginApi({ username, password }); // { token }
-        setTokenState(res.token); // trigger re-render (Navbar κ.λπ.)
+        const res = await loginApi({ username, password });
+        setTokenState(res.token);
     }, []);
 
     const logout = useCallback(() => {
