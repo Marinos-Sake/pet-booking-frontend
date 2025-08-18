@@ -5,6 +5,15 @@ import App from './App.tsx'
 import {BrowserRouter} from "react-router-dom";
 import {AuthProvider} from "./features/auth/useAuth.tsx";
 
+// DEBUG
+window.addEventListener("error", (e) => {
+    console.error("[GLOBAL ERROR]", e.error || e.message, e);
+});
+window.addEventListener("unhandledrejection", (e) => {
+    console.error("[UNHANDLED PROMISE REJECTION]", e.reason || e);
+});
+
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
       <BrowserRouter>
