@@ -5,6 +5,8 @@ import Booking from "./pages/Booking.tsx";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
 import MyProfile from "./pages/MyProfile.tsx";
+import DogsHotel from "./pages/DogsHotel.tsx";
+import CatHotel from "./pages/CatHotel";
 
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
                 <Route path="/booking" element={<Booking />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register/>}></Route>
+                <Route path="/dogs-hotel" element={<DogsHotel />} />
+                <Route path="/cats-lodge" element={<CatHotel />} />
             </Routes>
         </>
     );
