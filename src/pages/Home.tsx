@@ -1,9 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import dogs from "../assets/Dogs.png";
 import friends from "../assets/friends.png";
 import vacation from "../assets/vacation.png";
 import {useAuth} from "../features/auth/useAuth.tsx";
+
 
 function Home() {
 
@@ -72,19 +73,27 @@ function Home() {
 
                     <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div className="rounded-2xl border border-secondary-accent/20 bg-white p-5 shadow-sm">
+                            <Link
+                                to="/cats-lodge"
+                            >
                             <h2 className="text-xl font-semibold">Για Γάτες</h2>
                             <p className="mt-2 text-text-ink/70">
                                 Ήσυχοι, cozy χώροι με παιχνίδια και άνετα κρεβάτια — ιδανικοί
                                 για χαλαρές γατο-διακοπές.
                             </p>
+                            </Link>
                         </div>
 
                         <div className="rounded-2xl border border-secondary-accent/20 bg-white p-5 shadow-sm">
+                            <Link
+                                to="/dogs-hotel"
+                            >
                             <h2 className="text-xl font-semibold">Για Σκύλους</h2>
                             <p className="mt-2 text-text-ink/70">
                                 Καθημερινές βόλτες, παιχνίδι και ασφαλείς χώροι για
                                 κοινωνικοποίηση — με πολλή προσοχή.
                             </p>
+                            </Link>
                         </div>
                     </div>
                 </div>
