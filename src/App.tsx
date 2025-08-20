@@ -7,6 +7,8 @@ import Register from "./pages/Register.tsx";
 import MyProfile from "./pages/MyProfile.tsx";
 import DogsHotel from "./pages/DogsHotel.tsx";
 import CatHotel from "./pages/CatHotel";
+import About from "./pages/About";
+import Contact from "./pages/Contact.tsx"
 
 
 function App() {
@@ -21,7 +23,9 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register/>}></Route>
                 <Route path="/dogs-hotel" element={<DogsHotel />} />
-                <Route path="/cats-lodge" element={<CatHotel />} />
+                <Route path="/cats-hotel" element={<CatHotel />} />
+                <Route path="/about" element={ <About/>} />
+                <Route path="/contact" element={ <Contact/> } />
             </Routes>
         </>
     );
