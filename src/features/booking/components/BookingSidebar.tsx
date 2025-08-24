@@ -1,6 +1,6 @@
 import type { Room } from "../../room/types";
 import type { QuoteResponse } from "../types";
-import { useMyPets } from "../../pets/useMyPets";
+import { useMyPets } from "../../pets/useMyPets.ts";
 import type { Pet } from "../../pets/types";
 
 type Props = {
@@ -62,7 +62,6 @@ export default function BookingSidebar({
                 {error && <p className="text-red-500">{error}</p>}
             </div>
 
-            {/* Δωμάτιο */}
             <div className="flex flex-col gap-1">
                 <label className="text-sm text-text-muted">Δωμάτιο</label>
                 <select
@@ -73,18 +72,21 @@ export default function BookingSidebar({
                     className="rounded-xl border border-border-soft bg-surface-card px-3 py-2"
                 >
                     <option value="">— επίλεξε δωμάτιο —</option>
-                    {rooms.map((r) => (
-                        <option key={r.id} value={r.id}>
-                            {r.name} • {r.type} • {money(r.pricePerNight)}
-                        </option>
-                    ))}
+
+
+                    {rooms
+                        .filter((r) => r.isAvailable === true)
+                        .map((r) => (
+                            <option key={r.id} value={r.id}>
+                                {r.name} • {r.type} • {money(r.pricePerNight)}
+                            </option>
+                        ))}
                 </select>
                 <p className="text-xs text-text-muted">
                     Φορτώνουμε μόνο τα διαθέσιμα για τις ημερομηνίες σου.
                 </p>
             </div>
 
-            {/* Περίληψη */}
             <div className="mt-2 rounded-xl bg-surface-card border border-border-soft p-3">
                 <p>
                     <span className="font-semibold">Check-in:</span> {checkInISO || "—"}
@@ -99,10 +101,13 @@ export default function BookingSidebar({
                 <div className="mt-2">
                     <p>
                         <span className="font-semibold">Τιμή:</span>{" "}
-                        {quoteLoading ? "υπολογίζεται…" : quote ? `${quote.totalPrice.toFixed(2)}€` : "—"}
+                        {quoteLoading
+                            ? "υπολογίζεται…"
+                            : quote
+                                ? `${quote.totalPrice.toFixed(2)}€`
+                                : "—"}
                     </p>
-                    <p className="text-xs text-text-muted">
-                    </p>
+                    <p className="text-xs text-text-muted"></p>
                 </div>
             </div>
 
