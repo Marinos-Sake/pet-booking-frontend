@@ -1,18 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import type { DateRange } from "react-day-picker";
+
 import BookingCalendar from "../features/booking/components/BookingCalendar";
 import BookingSidebar from "../features/booking/components/BookingSidebar";
 import { createBooking } from "../features/booking/api/bookingApi";
 import { getAllRooms } from "../features/room/api/roomApi";
 import { useBookingQuote } from "../features/booking/hooks/useBookingQuote";
 import type { Room } from "../features/room/types";
-import { calcNights, toISO } from "../utils/date";
-import { useAuth } from "../features/auth/useAuth";
+import { calcNights, toISO } from "../lib/date.ts";
+import { useAuth } from "../features/auth/hooks/UseAuth.tsx";
 
 export default function Booking() {
-    const nav = useNavigate();
-    const { token, isAuthenticated } = useAuth();
+    const { token } = useAuth(); // ProtectedRoute εγγυάται ότι υπάρχει
 
     const [range, setRange] = useState<DateRange | undefined>();
     const [rooms, setRooms] = useState<Room[]>([]);
@@ -25,7 +24,6 @@ export default function Booking() {
 
     const canSubmit =
         !!checkInISO && !!checkOutISO && nights > 0 && !!selectedPetId && !!selectedRoomId;
-
 
     useEffect(() => {
         let cancelled = false;
@@ -57,18 +55,7 @@ export default function Booking() {
     });
 
     async function onSubmit() {
-        if (!canSubmit) return;
-
-        if (!isAuthenticated || !token) {
-            nav("/login", {
-                state: {
-                    from: { pathname: "/booking" },
-                    notice: "Πρέπει να συνδεθείς για να κάνεις κράτηση.",
-                },
-            });
-            return;
-        }
-
+        if (!canSubmit || !token) return;
         try {
             await createBooking(token, {
                 checkInDate: checkInISO!,
@@ -81,7 +68,7 @@ export default function Booking() {
             setSelectedPetId("");
             setSelectedRoomId("");
         } catch (e: any) {
-            alert("Σφάλμα κράτησης: " + (e?.message ?? "unknown"));
+            alert(e.message);
         }
     }
 
