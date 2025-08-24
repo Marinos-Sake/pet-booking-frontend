@@ -1,7 +1,7 @@
 import { DayPicker } from "react-day-picker";
 import type { DateRange } from "react-day-picker";
 import "react-day-picker/dist/style.css";
-import { startOfToday } from "../../../utils/date.ts";
+import {addDays, startOfToday} from "../../../lib/date.ts";
 
 export default function BookingCalendar({
                                             range,
@@ -18,7 +18,7 @@ export default function BookingCalendar({
                 onSelect={setRange}
                 numberOfMonths={2}
                 pagedNavigation
-                disabled={{ before: startOfToday() }}
+                disabled={{ before: addDays(startOfToday(), 1) }}
             />
         </div>
     );
