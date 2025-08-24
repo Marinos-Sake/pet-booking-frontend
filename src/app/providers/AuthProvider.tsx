@@ -1,31 +1,20 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { getToken as getStored, setToken as store, clearToken as wipe } from "./storage";
-import { loginApi, meApi } from "./api/authApi";
-import type { DecodedToken, MeProfile } from "./types";
+import { AuthContext } from "../../features/auth/context/authContext.ts";
+import { getToken, setToken as persistToken, clearToken } from "../../features/auth/storage.ts";
+import { loginApi, meApi } from "../../features/auth/api/authApi.ts";
+import type { DecodedToken, MeProfile } from "../../features/auth/types.ts";
 
-type AuthContextValue = {
-    token: string | null;
-    decoded: DecodedToken | null;
-    isExpired: boolean;
-    isAuthenticated: boolean;
-    profile: MeProfile | null;
-    loading: boolean;
-    login: (username: string, password: string) => Promise<void>;
-    logout: () => void;
-};
-
-const AuthContext = createContext<AuthContextValue | null>(null);
-
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [token, setTokenState] = useState<string | null>(() => getStored());
+export function AuthProvider({ children }: { children: ReactNode }) {
+    const [token, setTokenState] = useState<string | null>(() => getToken());
     const [profile, setProfile] = useState<MeProfile | null>(null);
     const [loading, setLoading] = useState<boolean>(!!token);
 
-    // sync localStorage σε κάθε αλλαγή token
+    // sync localStorage
     useEffect(() => {
-        if (token) store(token);
-        else wipe();
+        if (token) persistToken(token);
+        else clearToken();
     }, [token]);
 
     const decoded = useMemo<DecodedToken | null>(() => {
@@ -40,15 +29,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const isExpired = useMemo(() => {
         if (!decoded?.exp) return true;
         return Date.now() / 1000 > decoded.exp;
-    }, [decoded]);
 
+    }, [decoded?.exp]);
 
     useEffect(() => {
         let cancelled = false;
         (async () => {
             if (!token || isExpired) {
-                setProfile(null);
-                setLoading(false);
+                if (!cancelled) {
+                    setProfile(null);
+                    setLoading(false);
+                }
                 return;
             }
             setLoading(true);
@@ -76,22 +67,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setProfile(null);
     }, []);
 
-    const value: AuthContextValue = {
-        token,
-        decoded,
-        isExpired,
-        isAuthenticated: !!token && !isExpired,
-        profile,
-        loading,
-        login,
-        logout,
-    };
+    const value = useMemo(
+        () => ({
+            token,
+            decoded,
+            isExpired,
+            isAuthenticated: !!token && !isExpired,
+            profile,
+            loading,
+            login,
+            logout,
+            setProfile,
+        }),
+        [token, decoded, isExpired, profile, loading, login, logout]
+    );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth() {
-    const ctx = useContext(AuthContext);
-    if (!ctx) throw new Error("useAuth must be used within <AuthProvider>");
-    return ctx;
 }
