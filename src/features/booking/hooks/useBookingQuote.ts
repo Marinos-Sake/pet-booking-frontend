@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getQuote } from "../api/bookingApi";
 import type { QuoteResponse } from "../types";
-import { useAuth } from "../../auth/useAuth";
+import { useAuth } from "../../auth/hooks/UseAuth.tsx";
 
 export function useBookingQuote(params: {
     checkInDate?: string;
