@@ -1,11 +1,10 @@
 import { NavLink, Link, useLocation, useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
-import { useAuth } from "../features/auth/useAuth.tsx";
+import logo from "../../assets/logo.png";
+import { useAuth } from "../../features/auth/hooks/UseAuth.tsx";
 
 const navItems = [
     { to: "/dogs-hotel", label: "ΞΕΝΟΔΟΧΕΙΟ ΣΚΥΛΩΝ" },
-    { to: "/cats-lodge", label: "ΞΕΝΩΝΑΣ ΓΑΤΑΣ" },
-    { to: "/gallery", label: "ΦΩΤΟΓΡΑΦΙΕΣ" },
+    { to: "/cats-hotel", label: "ΞΕΝΟΔΟΧΕΙΟ ΓΑΤΑΣ" },
     { to: "/about", label: "ΠΟΙΟΙ ΕΙΜΑΣΤΕ" },
     { to: "/contact", label: "ΕΠΙΚΟΙΝΩΝΙΑ" },
 ];
