@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../auth/useAuth";
-import type { Pet } from "./types";
+import type {Pet} from "./types.ts";
+import {useAuth} from "../auth/hooks/UseAuth.tsx";
+import {getMyPets} from "./api/petsApi.ts";
+
 
 export function useMyPets(): { pets: Pet[]; loading: boolean; error: string | null } {
     const { token, isAuthenticated } = useAuth();
@@ -11,22 +13,21 @@ export function useMyPets(): { pets: Pet[]; loading: boolean; error: string | nu
     useEffect(() => {
         if (!isAuthenticated || !token) return;
 
+        const ac = new AbortController();
         (async () => {
-            setLoading(true);
-            setError(null);
             try {
-                const r = await fetch("/api/pets/my", {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                if (!r.ok) throw new Error(await r.text());
-                const data: Pet[] = await r.json();
-                setPets(data);
-            } catch (err: any) {
-                setError(err?.message || "Σφάλμα κατά την ανάκτηση κατοικιδίων");
+                setLoading(true);
+                setError(null);
+                const data = await getMyPets(token);
+                if (!ac.signal.aborted) setPets(data);
+            } catch (e: any) {
+                if (!ac.signal.aborted) setError(e?.message ?? "Σφάλμα κατά την ανάκτηση κατοικιδίων");
             } finally {
-                setLoading(false);
+                if (!ac.signal.aborted) setLoading(false);
             }
         })();
+
+        return () => ac.abort();
     }, [isAuthenticated, token]);
 
     return { pets, loading, error };
