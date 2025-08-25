@@ -17,3 +17,9 @@ export function calcNights(from?: Date, to?: Date) {
     const diff = Math.ceil(ms / (1000 * 60 * 60 * 24));
     return diff > 0 ? diff : 0;
 }
+
+export function addDays(date: Date, days: number): Date {
+    const d = new Date(date);
+    d.setDate(d.getDate() + days);
+    return d;
+}
