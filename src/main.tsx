@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import {BrowserRouter} from "react-router-dom";
-import {AuthProvider} from "./features/auth/useAuth.tsx";
+import {AuthProvider} from "./app/providers/AuthProvider.tsx";
 
 // DEBUG
 window.addEventListener("error", (e) => {
