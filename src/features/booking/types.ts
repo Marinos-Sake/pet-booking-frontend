@@ -21,3 +21,10 @@ export type BookingListItem = {
     roomName: string | null;
     petName: string | null;
 };
+
+export type createBooking = {
+    checkInDate: string;
+    checkOutDate: string;
+    petId: number;
+    roomId: number;
+}
