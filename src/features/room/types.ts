@@ -1,5 +1,3 @@
-export type RoomType = "CAT" | "DOG";
-
 export type Room = {
     id: number;
     name: string;
@@ -11,6 +9,19 @@ export type Room = {
 };
 
 export const roomTypeLabel: Record<RoomType, string> = {
-    CAT: "Γάτα",
-    DOG: "Σκύλος",
+    SMALL: "Μικρό",
+    MEDIUM: "Μεσαίο",
+    LARGE: "Μεγάλο",
 };
+
+
+export type CreateRoomPayload = {
+    name: string;
+    type: RoomType;
+    capacity: number;
+    description: string;
+    isAvailable: boolean;
+    pricePerNight: number;
+};
+
+export type RoomType = "SMALL" | "MEDIUM" | "LARGE";
