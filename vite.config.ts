@@ -15,12 +15,15 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:8080", // Spring Boot backend
         changeOrigin: true,
+        // Note: In practice this proxy is not used because all requests go through VITE_API_URL.
+        // Leave it here just for convenience in dev environments or as a fallback if needed.
+
       },
     },
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"), // για import "@/..."
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 });
