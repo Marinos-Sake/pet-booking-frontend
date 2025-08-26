@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate} from "react-router-dom";
 import {registerApi} from "../features/auth/api/authApi.ts";
-import {useAuth} from "../features/auth/useAuth.tsx";
+import {useAuth} from "../features/auth/hooks/UseAuth.tsx";
 import type {RegisterPayload} from "../features/auth/types.ts";
 
 export default function Register() {
