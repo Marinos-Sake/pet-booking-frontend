@@ -3,7 +3,7 @@ import logo from "../assets/logo.png";
 import dogs from "../assets/Dogs.png";
 import friends from "../assets/friends.png";
 import vacation from "../assets/vacation.png";
-import {useAuth} from "../features/auth/useAuth.tsx";
+import {useAuth} from "../features/auth/hooks/UseAuth.tsx";
 
 
 function Home() {
@@ -24,6 +24,7 @@ function Home() {
         }
     }
     return (
+
         <div className="min-h-screen bg-gradient-to-b from-secondary-accent/10 via-surface-canvas to-primary-brand/5">
 
             <section className="relative overflow-hidden">
@@ -45,7 +46,7 @@ function Home() {
                         <img
                             src={logo}
                             alt="Logo"
-                            className="w-10 h-10 rounded-full overflow-hidden"
+                            className="w-20 h-20 rounded-full overflow-hidden"
                         />
                         κατοικιδίων
                     </h1>
@@ -74,12 +75,12 @@ function Home() {
                     <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div className="rounded-2xl border border-secondary-accent/20 bg-white p-5 shadow-sm">
                             <Link
-                                to="/cats-lodge"
+                                to="/cats-hotel"
                             >
                             <h2 className="text-xl font-semibold">Για Γάτες</h2>
                             <p className="mt-2 text-text-ink/70">
-                                Ήσυχοι, cozy χώροι με παιχνίδια και άνετα κρεβάτια — ιδανικοί
-                                για χαλαρές γατο-διακοπές.
+                                Ήσυχοι cozy χώροι με παιχνίδια και άνετα κρεβάτια, ιδανικοί
+                                για χαλαρές γατο διακοπές.
                             </p>
                             </Link>
                         </div>
@@ -91,7 +92,7 @@ function Home() {
                             <h2 className="text-xl font-semibold">Για Σκύλους</h2>
                             <p className="mt-2 text-text-ink/70">
                                 Καθημερινές βόλτες, παιχνίδι και ασφαλείς χώροι για
-                                κοινωνικοποίηση — με πολλή προσοχή.
+                                κοινωνικοποίηση με πολλή προσοχή.
                             </p>
                             </Link>
                         </div>
