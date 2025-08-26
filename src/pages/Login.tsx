@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { useAuth } from "../features/auth/useAuth.tsx";
+import { useAuth } from "../features/auth/hooks/UseAuth.tsx";
 import { useEffect } from "react";
 
 export default function Login() {
@@ -8,9 +8,8 @@ export default function Login() {
     const loc = useLocation();
     const { login, isAuthenticated, loading } = useAuth();
 
-    const from = (loc.state as any)?.from?.pathname ?? "/me";
+    const [notice, setNotice] = useState<string | undefined>((loc.state as any)?.notice);
 
-    const notice = (loc.state as any)?.notice as string | undefined;
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -18,10 +17,20 @@ export default function Login() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!loading && isAuthenticated && !(loc.state as any)?.from) {
+        if (!notice) {
+            const m = sessionStorage.getItem("flash_notice");
+            if (m) {
+                setNotice(m);
+                sessionStorage.removeItem("flash_notice");
+            }
+        }
+    }, [notice]);
+
+    useEffect(() => {
+        if (!loading && isAuthenticated) {
             nav("/me", { replace: true });
         }
-        }, [loading, isAuthenticated, loc.state, nav]);
+    }, [loading, isAuthenticated, nav]);
 
     async function onSubmit(e: FormEvent) {
         e.preventDefault();
@@ -29,7 +38,8 @@ export default function Login() {
         setError(null);
         try {
             await login(username.trim(), password);
-            nav(from, { replace: true });
+            console.log("login state:", loc.state);
+            nav("/me", { replace: true });
         } catch (err: any) {
             setError(err?.message ?? "Αποτυχία σύνδεσης");
         } finally {
@@ -47,7 +57,10 @@ export default function Login() {
                 </p>
             )}
 
-            <form onSubmit={onSubmit} className="rounded-2xl border border-border-soft bg-white p-6 flex flex-col gap-4">
+            <form
+                onSubmit={onSubmit}
+                className="rounded-2xl border border-border-soft bg-white p-6 flex flex-col gap-4"
+            >
                 <div className="flex flex-col gap-1">
                     <label className="text-sm text-text-muted">Όνομα χρήστη</label>
                     <input
@@ -82,7 +95,7 @@ export default function Login() {
                 </button>
 
                 <p className="text-sm text-text-muted mt-2">
-                    Δεν έχεις λογαριασμό;{" "}
+                    Δεν έχεις λογαριασμό{" "}
                     <Link to="/register" className="underline">Δημιούργησε έναν</Link>
                 </p>
             </form>
