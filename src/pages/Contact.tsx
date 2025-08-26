@@ -1,7 +1,6 @@
 export default function Contact() {
     return (
         <div className="min-h-screen bg-surface-canvas">
-            {/* Hero */}
             <section className="relative">
                 <div className="absolute inset-0 bg-gradient-to-b from-secondary-accent/10 to-transparent" />
                 <div className="relative mx-auto max-w-6xl px-6 py-12 text-center">
@@ -13,7 +12,7 @@ export default function Contact() {
             </section>
 
             <section className="mx-auto max-w-6xl px-6 pb-16 grid gap-8 lg:grid-cols-3">
-                {/* Info cards */}
+
                 <div className="space-y-4">
                     <div className="rounded-2xl border border-border-soft bg-surface-card p-5 shadow-sm">
                         <div className="text-sm text-text-muted">Τηλέφωνο</div>
@@ -30,7 +29,7 @@ export default function Contact() {
                         </div>
                     </div>
 
-                    {/* Map */}
+
                     <div className="rounded-2xl border border-border-soft overflow-hidden shadow-sm">
                         <iframe
                             title="Χάρτης"
@@ -42,7 +41,7 @@ export default function Contact() {
                     </div>
                 </div>
 
-                {/* Contact form (static) */}
+
                 <div className="lg:col-span-2 rounded-2xl border border-border-soft bg-surface-card p-6 shadow-sm">
                     <form className="grid gap-4 sm:grid-cols-2">
                         <div>
