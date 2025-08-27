@@ -78,7 +78,13 @@ export default function Booking() {
             <p className="mt-2 text-text-muted">Διάλεξε ημερομηνίες και συμπλήρωσε τα στοιχεία σου.</p>
 
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                <BookingCalendar range={range} setRange={setRange} />
+                <BookingCalendar
+                    range={range}
+                    setRange={setRange}
+                    selectedRoomId={typeof selectedRoomId === "number" ? selectedRoomId : undefined}
+                    token={token}
+                />
+
                 <BookingSidebar
                     rooms={rooms}
                     selectedPetId={selectedPetId}
