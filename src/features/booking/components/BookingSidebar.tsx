@@ -36,7 +36,7 @@ export default function BookingSidebar({
 
     function money(v: unknown) {
         const n = typeof v === "number" ? v : Number(v);
-        if (Number.isNaN(n)) return "—";
+        if (Number.isNaN(n)) return "-";
         return n.toFixed(2) + "€";
     }
 
@@ -52,7 +52,7 @@ export default function BookingSidebar({
                     disabled={loading}
                     className="rounded-xl border border-border-soft bg-surface-card px-3 py-2"
                 >
-                    <option value="">— επίλεξε κατοικίδιο —</option>
+                    <option value="">- επίλεξε κατοικίδιο -</option>
                     {pets.map((p: Pet) => (
                         <option key={p.id} value={p.id}>
                             {p.name} • {p.petType === "CAT" ? "Γάτα" : "Σκύλος"}
@@ -71,7 +71,7 @@ export default function BookingSidebar({
                     }
                     className="rounded-xl border border-border-soft bg-surface-card px-3 py-2"
                 >
-                    <option value="">— επίλεξε δωμάτιο —</option>
+                    <option value="">- επίλεξε δωμάτιο -</option>
 
 
                     {rooms
@@ -89,10 +89,10 @@ export default function BookingSidebar({
 
             <div className="mt-2 rounded-xl bg-surface-card border border-border-soft p-3">
                 <p>
-                    <span className="font-semibold">Check-in:</span> {checkInISO || "—"}
+                    <span className="font-semibold">Check-in:</span> {checkInISO || "-"}
                 </p>
                 <p>
-                    <span className="font-semibold">Check-out:</span> {checkOutISO || "—"}
+                    <span className="font-semibold">Check-out:</span> {checkOutISO || "-"}
                 </p>
                 <p>
                     <span className="font-semibold">Διανυκτερεύσεις:</span> {nights}
@@ -105,7 +105,7 @@ export default function BookingSidebar({
                             ? "υπολογίζεται…"
                             : quote
                                 ? `${quote.totalPrice.toFixed(2)}€`
-                                : "—"}
+                                : "-"}
                     </p>
                     <p className="text-xs text-text-muted"></p>
                 </div>
