@@ -8,7 +8,11 @@ export async function loginApi(body: LoginRequest): Promise<LoginResponse> {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
     });
-    if (!response.ok) throw new Error(await response.text());
+
+    if (!response.ok) {
+        throw new Error("Invalid username or password.")
+    }
+
     return response.json();
 }
 
@@ -16,7 +20,11 @@ export async function meApi(token: string): Promise<MeProfile> {
     const response = await fetch(`${API_URL}/users/me`, {
         headers: { Authorization: `Bearer ${token}` },
     });
-    if (!response.ok) throw new Error(await response.text());
+
+    if (!response.ok) {
+        throw new Error("Something went wrong. Please try later.");
+    }
+
     return response.json();
 }
 
@@ -27,12 +35,16 @@ export async function registerApi(payload: RegisterPayload): Promise<RegisterPay
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
     });
-    if (!response.ok) throw new Error(await response.text());
+
+    if (!response.ok) {
+        throw new Error("Something went wrong. Please try again.");
+    }
+
     return response.json();
 }
 
 export async function updateMyProfile(token: string, payload: any): Promise<MeProfile> {
-    const r = await fetch(`${API_URL}/users/me`, {
+    const response = await fetch(`${API_URL}/users/me`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -40,6 +52,10 @@ export async function updateMyProfile(token: string, payload: any): Promise<MePr
         },
         body: JSON.stringify(payload),
     });
-    if (!r.ok) throw new Error(await r.text());
-    return r.json();
+
+    if (!response.ok) {
+        throw new Error("Something went wrong. Please try again.");
+    }
+
+    return response.json();
 }
