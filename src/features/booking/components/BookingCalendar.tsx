@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import type { DateRange } from "react-day-picker";
 import "react-day-picker/dist/style.css";
-import { startOfMonth, endOfMonth } from "date-fns";
+
+import { startOfMonth, endOfMonth, addMonths, startOfDay } from "date-fns";
 import { addDays, startOfToday } from "../../../lib/date";
 import { getRoomCalendar } from "../../room/api/roomApi";
 
@@ -10,8 +11,10 @@ type Props = {
     range: DateRange | undefined;
     setRange: (r: DateRange | undefined) => void;
     selectedRoomId?: number | "";
-    token?: string | null; //
+    token?: string | null;
 };
+
+const VISIBLE_MONTHS = 2;
 
 export default function BookingCalendar({ range, setRange, selectedRoomId, token }: Props) {
     const [month, setMonth] = useState<Date>(new Date());
@@ -19,12 +22,18 @@ export default function BookingCalendar({ range, setRange, selectedRoomId, token
     const [loading, setLoading] = useState(false);
 
     const from = useMemo(() => startOfMonth(month), [month]);
-    const to = useMemo(() => endOfMonth(month), [month]);
+
+
+    const to = useMemo(
+        () => endOfMonth(addMonths(month, VISIBLE_MONTHS - 1)),
+        [month]
+    );
+
 
     useEffect(() => {
         setRange(undefined);
         setDisabledRanges([]);
-    }, [selectedRoomId]);
+    }, [selectedRoomId, setRange]);
 
     useEffect(() => {
         if (!selectedRoomId || typeof selectedRoomId !== "number") return;
@@ -38,7 +47,13 @@ export default function BookingCalendar({ range, setRange, selectedRoomId, token
                     to.toISOString().slice(0, 10),
                     token ?? undefined
                 );
-                setDisabledRanges(data.map(r => ({ from: new Date(r.from), to: new Date(r.to) })));
+
+                setDisabledRanges(
+                    data.map((r: { from: string; to: string }) => ({
+                        from: startOfDay(new Date(r.from)),
+                        to: startOfDay(new Date(r.to)),
+                    }))
+                );
             } catch (e) {
                 console.error("Error: Failed to load room availability", e);
                 setDisabledRanges([]);
@@ -59,11 +74,11 @@ export default function BookingCalendar({ range, setRange, selectedRoomId, token
                 onMonthChange={setMonth}
                 selected={range}
                 onSelect={setRange}
-                numberOfMonths={2}
+                numberOfMonths={VISIBLE_MONTHS}
                 pagedNavigation
                 disabled={[
                     { before: addDays(startOfToday(), 1) },
-                    ...disabledRanges
+                    ...disabledRanges,
                 ]}
             />
         </div>
