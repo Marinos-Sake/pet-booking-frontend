@@ -1,11 +1,17 @@
 import type { Room} from "../types";
+import {extractErrorMessage} from "../../../lib/http.ts";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export async function getAllRooms(): Promise<Room[]> {
-    const r = await fetch(`${API_URL}/rooms`);
-    if (!r.ok) throw new Error(await r.text());
-    return r.json();
+    const response = await fetch(`${API_URL}/rooms`);
+
+    if (!response.ok) {
+        const msg = await extractErrorMessage(response);
+        throw new Error(msg);
+    }
+
+    return response.json();
 }
 
 
@@ -20,12 +26,16 @@ export async function getRoomCalendar(
     const headers: Record<string, string> = {};
     if (token) headers.Authorization = `Bearer ${token}`;
 
-    const r = await fetch(
+    const response = await fetch(
         `${API_URL}/rooms/${roomId}/calendar?from=${fromISO}&to=${toISO}`,
         { headers } // <-- send headers
     );
-    if (!r.ok) throw new Error("Failed to load room availability");
-    return r.json();
+    if (!response.ok) {
+        const msg = await extractErrorMessage(response);
+        throw new Error(msg);
+    }
+
+    return response.json();
 }
 
 
