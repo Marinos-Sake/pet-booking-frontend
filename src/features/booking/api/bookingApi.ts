@@ -1,5 +1,6 @@
 import type {createBooking, QuoteRequest, QuoteResponse} from "../types";
 import type { BookingListItem } from "../types";
+import {extractErrorMessage} from "../../../lib/http.ts";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -7,7 +8,7 @@ export async function createBooking(
     token: string,
     payload: createBooking
 ) {
-    const res = await fetch(`${API_URL}/bookings`, {
+    const response = await fetch(`${API_URL}/bookings`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -16,11 +17,13 @@ export async function createBooking(
         body: JSON.stringify(payload),
     });
 
-    if (!res.ok) {
-        throw new Error("Οι ημερομηνίες που επέλεξες δεν είναι διαθέσιμες για κράτηση.");
+    if (!response.ok) {
+        const msg = await extractErrorMessage(response);
+        throw new Error(msg);
     }
 
-    return res.json();
+
+    return response.json();
 }
 
 
@@ -33,21 +36,31 @@ export async function getQuote(
     };
     if (token) headers.Authorization = `Bearer ${token}`;
 
-    const r = await fetch(`${API_URL}/bookings/quote`, {
+    const response = await fetch(`${API_URL}/bookings/quote`, {
         method: "POST",
         headers,
         body: JSON.stringify(payload),
     });
-    if (!r.ok) throw new Error(await r.text());
-    return r.json();
+
+    if (!response.ok) {
+        const msg = await extractErrorMessage(response);
+        throw new Error(msg);
+    }
+
+    return response.json();
 }
 
 export async function getMyBookings(token: string): Promise<BookingListItem[]> {
-    const r = await fetch(`${API_URL}/bookings/my`, {
+    const response = await fetch(`${API_URL}/bookings/my`, {
         headers: { Authorization: `Bearer ${token}` },
     });
-    if (!r.ok) throw new Error(await r.text());
-    return r.json();
+
+    if (!response.ok) {
+        const msg = await extractErrorMessage(response);
+        throw new Error(msg);
+    }
+
+    return response.json();
 }
 
 
