@@ -1,9 +1,10 @@
 import type { PaymentInsert, PaymentRead } from "../types";
+import {extractErrorMessage} from "../../../lib/http.ts";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export async function createPayment(token: string, payload: PaymentInsert): Promise<PaymentRead> {
-    const r = await fetch(`${API_URL}/payments`, {
+    const response = await fetch(`${API_URL}/payments`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -11,14 +12,23 @@ export async function createPayment(token: string, payload: PaymentInsert): Prom
         },
         body: JSON.stringify(payload),
     });
-    if (!r.ok) throw new Error(await r.text());
-    return r.json();
+    if (!response.ok) {
+        const msg = await extractErrorMessage(response);
+        throw new Error(msg);
+    }
+
+    return response.json();
 }
 
 export async function getMyPayments(token: string): Promise<PaymentRead[]> {
-    const r = await fetch(`${API_URL}/payments/my`, {
+    const response = await fetch(`${API_URL}/payments/my`, {
         headers: { Authorization: `Bearer ${token}` },
     });
-    if (!r.ok) throw new Error(await r.text());
-    return r.json();
+
+    if (!response.ok) {
+        const msg = await extractErrorMessage(response);
+        throw new Error(msg);
+    }
+
+    return response.json();
 }
