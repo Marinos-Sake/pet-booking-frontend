@@ -1,4 +1,5 @@
 import type {LoginRequest, LoginResponse, MeProfile, RegisterPayload} from "../types";
+import {extractErrorMessage} from "../../../lib/http.ts";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -10,7 +11,8 @@ export async function loginApi(body: LoginRequest): Promise<LoginResponse> {
     });
 
     if (!response.ok) {
-        throw new Error("Invalid username or password.")
+        const msg = await extractErrorMessage(response);
+        throw new Error(msg);
     }
 
     return response.json();
@@ -22,7 +24,8 @@ export async function meApi(token: string): Promise<MeProfile> {
     });
 
     if (!response.ok) {
-        throw new Error("Something went wrong. Please try later.");
+        const msg = await extractErrorMessage(response);
+        throw new Error(msg);
     }
 
     return response.json();
@@ -37,7 +40,8 @@ export async function registerApi(payload: RegisterPayload): Promise<RegisterPay
     });
 
     if (!response.ok) {
-        throw new Error("Something went wrong. Please try again.");
+        const msg = await extractErrorMessage(response);
+        throw new Error(msg);
     }
 
     return response.json();
@@ -54,7 +58,8 @@ export async function updateMyProfile(token: string, payload: any): Promise<MePr
     });
 
     if (!response.ok) {
-        throw new Error("Something went wrong. Please try again.");
+        const msg = await extractErrorMessage(response);
+        throw new Error(msg);
     }
 
     return response.json();
