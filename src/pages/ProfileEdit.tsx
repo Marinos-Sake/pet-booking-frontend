@@ -62,7 +62,15 @@ export default function ProfileEdit() {
 
     function buildPayload(curr: MeProfile) {
         const payload: any = {};
-        if (username && username !== curr.username) payload.username = username.trim();
+
+        if (username !== undefined) {
+            if (username.trim() === "") {
+                payload.username = "";
+            } else if (username !== curr.username) {
+                payload.username = username.trim();
+            }
+        }
+
         if (password && password.trim().length > 0) payload.password = password.trim();
 
         const changedPerson: any = {};
