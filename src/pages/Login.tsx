@@ -38,7 +38,6 @@ export default function Login() {
         setError(null);
         try {
             await login(username.trim(), password);
-            console.log("login state:", loc.state);
             nav("/me", { replace: true });
         } catch (err: any) {
             setError(err?.message ?? "Αποτυχία σύνδεσης");
