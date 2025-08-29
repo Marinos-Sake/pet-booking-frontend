@@ -1,9 +1,10 @@
 import type { Pet, CreatePetPayload } from "../types";
+import {extractErrorMessage} from "../../../lib/http.ts";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export async function createPetApi(token: string, payload: CreatePetPayload): Promise<Pet> {
-    const res = await fetch(`${API_URL}/pets`, {
+    const response = await fetch(`${API_URL}/pets`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -12,20 +13,23 @@ export async function createPetApi(token: string, payload: CreatePetPayload): Pr
         body: JSON.stringify(payload),
     });
 
-    if (!res.ok) {
-        let txt = "";
-        try { txt = await res.text(); } catch {}
-        const err = new Error(txt || "Αποτυχία δημιουργίας κατοικιδίου");
-        (err as any).status = res.status;
-        throw err;
+    if (!response.ok) {
+        const msg = await extractErrorMessage(response);
+        throw new Error(msg);
     }
-    return res.json();
+
+    return response.json();
 }
 
 export async function getMyPets(token: string): Promise<Pet[]> {
-    const r = await fetch(`${API_URL}/pets/my`, {
+    const response = await fetch(`${API_URL}/pets/my`, {
         headers: { Accept: "application/json", Authorization: `Bearer ${token}` },
     });
-    if (!r.ok) throw new Error(await r.text());
-    return await r.json();
+
+    if (!response.ok) {
+        const msg = await extractErrorMessage(response);
+        throw new Error(msg);
+    }
+
+    return await response.json();
 }
